@@ -10,18 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: checkout code
+      - uses: actions/checkout@v4
+      - name: checkout code
 
-    - name: Build 
-      run: |
-        docker build -t my-app:${{GITHUB_SHA}} .
+      - name: Build 
+        run: docker build -t my-app:${{GITHUB_SHA}} .
 
-    - name: Simulation de tests unitaires
-      run: |
-        echo "lancements tests"
-        docker run -d --name test-container my-app:${{GITHUB_SHA}}
-        sleep 5
-        docker exec test-container nginx -t echo "Tests unitaires réussis"
-        docker stop test-container
+      - name: tests-unitaires
+        run: |
+          echo "lancements tests"
+          docker run -d --name test-container my-app:${{GITHUB_SHA}}
+          sleep 5
+          docker exec test-container nginx -t echo "Tests unitaires réussis"
+          docker stop test-container
       
