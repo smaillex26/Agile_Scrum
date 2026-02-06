@@ -5,22 +5,20 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    build-and-test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Build 
-        run: docker build -t my-app:${{GITHUB_SHA}} .
+      - name: Build
+        run: docker build -t my-app:${{ github.sha }} .
 
-      - name: tests-unitaires
+      - name: Tests unitaires
         run: |
           echo "lancements tests"
-          docker run -d --name test-container my-app:${{GITHUB_SHA}}
+          docker run -d --name test-container my-app:${{ github.sha }}
           sleep 5
-          docker exec test-container nginx -t echo "Tests unitaires réussis"
+          docker exec test-container nginx -t && echo "Tests unitaires réussis"
           docker stop test-container
-      
